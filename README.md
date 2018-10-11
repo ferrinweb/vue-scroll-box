@@ -5,6 +5,8 @@
 > 简单的滚动盒子组件，支持鼠标和触摸操作，支持反馈pull-down、pull-up事件以支持下拉刷新和上拉加载。自带返回顶部按钮。
 > 基于浏览器默认滚动盒子，功能简单，无复杂的设置项。
 
+![](https://github.com/ferrinweb/vue-scroll-box/raw/master/vue-scroll-box.gif)
+
 ## How to use / 如何使用
 
 ### Install / 安装
