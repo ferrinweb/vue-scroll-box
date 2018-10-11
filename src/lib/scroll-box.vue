@@ -28,7 +28,7 @@ you should run 'this.$refs.scrollInstance.scrollUpdate()' to update the scroll-i
     ><slot name="dragDownArea"><span class="drag-down-text">Release and reload</span></slot></div>
     <div class="scroll-content-wrapper"
         ref="scrollContent"
-        :class="{'holding': reloading || loading}"
+        :class="{'holding': reloading || loading, 'draging': draging && (dragDownDistance || dragUpDistance)}"
         @touchmove="startTouchDrag($event)"
         @touchstart="markDragStart($event)"
         @touchend="markDragEnd"
@@ -81,6 +81,7 @@ export default {
       scrollContentHeight: 0,
       y: 0,
       currentY: null,
+      draging: false,
       dragUpDistance: 0,
       dragDownDistance: 0,
       dragDownTrigger: false,
@@ -101,10 +102,12 @@ export default {
       // 仅当在滚动边界处赋值拖动起始点
       if (!this.enableDragDown && !this.enableDragUp) return
       if (!this.isBottom && !this.isTop) return
+      this.draging = true
       this.currentY = e.type === 'touchstart' ? e.touches[0].pageY : e.pageY
       this.scrollContent.style.transition = 'unset'
     },
     markDragEnd () {
+      this.draging = false
       if (this.reloading || this.loading) return
       this.currentY = null
       if (!this.dragDownDistance && !this.dragUpDistance) return
@@ -181,11 +184,13 @@ export default {
         contentUpdate && this.$nextTick(() => {
           this.scrollContent.style.transition = 'unset'
           this.scrollContent.style.transform = ''
-          this.scrollContentHeight = this.scrollContent.clientHeight
           this.scrollBox.scroll({top: this.y + this.halfDistance})
         })
         this.loading = false
       }
+      this.$nextTick(() => {
+        this.scrollContentHeight = this.scrollContent.clientHeight
+      })
       this.reloading = false
       this.dragDownDistance = 0
       this.dragUpDistance = 0
@@ -250,6 +255,13 @@ export default {
     this.scrollBoxHeight = this.scrollBox.clientHeight
     this.scrollContent = this.$refs.scrollContent
     this.scrollContentHeight = this.scrollContent.clientHeight
+    // todo 窗口尺寸变化时，应该重新计算滚动盒子高度
+    // todo 但是无法注销事件函数
+    window.addEventListener('resize', () => {
+      this.$nextTick(() => {
+        this.scrollBoxHeight = this.scrollBox.clientHeight
+      })
+    })
   }
 }
 </script>
@@ -270,6 +282,9 @@ export default {
     transform: translateY(0);
     transition: transform .3s cubic-bezier(.11,.49,.61,.99);
     z-index: 2;
+  }
+  .scroll-content-wrapper.draging > * {
+    pointer-events: none;
   }
   .after, .before{
     position: absolute;
