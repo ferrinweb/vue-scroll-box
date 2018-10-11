@@ -1,9 +1,7 @@
-import scrollBox from './scroll-box.vue'
+import ScrollBox from './scroll-box.vue'
 
-const ScrollBox = {
-  install: function (Vue) {
-    Vue.component(scrollBox.name, scrollBox)
-  }
+ScrollBox.install = function (Vue) {
+  Vue.component(ScrollBox.name, ScrollBox)
 }
 
 if (typeof window !== 'undefined' && window.Vue) {

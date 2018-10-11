@@ -11,9 +11,9 @@
     "url": "git+https://github.com/ferrinweb/vue-scroll-box.git"
   },
   "keywords": [
-    "vue",
     "scroll",
     "scroll-box",
+    "better-scroll",
     "pull-up",
     "pull-down"
   ],
