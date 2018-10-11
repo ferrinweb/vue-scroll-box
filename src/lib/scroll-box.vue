@@ -78,6 +78,7 @@ export default {
       scrollBox: null,
       scrollBoxHeight: 0,
       scrollContent: null,
+      scrollContentHeight: 0,
       y: 0,
       currentY: null,
       dragUpDistance: 0,
@@ -180,6 +181,7 @@ export default {
         contentUpdate && this.$nextTick(() => {
           this.scrollContent.style.transition = 'unset'
           this.scrollContent.style.transform = ''
+          this.scrollContentHeight = this.scrollContent.clientHeight
           this.scrollBox.scroll({top: this.y + this.halfDistance})
         })
         this.loading = false
@@ -221,7 +223,7 @@ export default {
       return this.y === 0
     },
     isBottom () {
-      return this.y + this.scrollBoxHeight === this.scrollContent.clientHeight
+      return this.y + this.scrollBoxHeight === this.scrollContentHeight
     },
     triggerDistance () {
       return this.dragDistance * 0.618
@@ -247,6 +249,7 @@ export default {
     this.scrollBox = this.$refs.scrollBox
     this.scrollBoxHeight = this.scrollBox.clientHeight
     this.scrollContent = this.$refs.scrollContent
+    this.scrollContentHeight = this.scrollContent.clientHeight
   }
 }
 </script>
