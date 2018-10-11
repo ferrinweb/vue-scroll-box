@@ -1,6 +1,7 @@
 # vue-scroll-box
 
 > A ScrollBox vue component, support pull-down and pull-up event.
+
 > 简单的滚动盒子组件，支持鼠标和触摸操作，支持反馈pull-down、pull-up事件以支持下拉刷新和上拉加载。自带返回顶部按钮。
 > 基于浏览器默认滚动盒子，功能简单，无复杂的设置项。
 
@@ -38,6 +39,7 @@ export default {
 
 ### Use and demo / 使用及示例
 > You can ckeckout this repository and try this demo.
+
 > 你可以直接检出 vue-scroll-box 源码到本地，查看示例。
 
 ```javascript
@@ -108,7 +110,7 @@ export default {
     },
     testScrollTop (target) {
       // you can use vue-scroll-box's inner method 'scrollTo'
-      // to scroll the content view to some px position or element. 
+      // to scroll the content view to some px position or element.
       // 通过滚动盒子内部方法 scrollTo，你可以方便的将内容滚动至指定的像素位置、元素。
       this.$refs.scrollBox.scrollTo(target)
     }
@@ -205,7 +207,7 @@ scrollTo | 滚动内容至指定位置 | target：Nubmer类型为坐标，即滚
 ### Events / 事件
 名称 | 说明
 |---|---|
-pull-down | 下拉刷新操作拖动屏幕距离超过阈值，释放拖动，则抛出该事件，仅当 enableDragDown 为 true 时有效 
+pull-down | 下拉刷新操作拖动屏幕距离超过阈值，释放拖动，则抛出该事件，仅当 enableDragDown 为 true 时有效
 pull-up | 上拉加载操作拖动屏幕距离超过阈值，释放拖动，则抛出该事件，仅当 enableDragUp 为 true 时有效
 
 ## Lisence
