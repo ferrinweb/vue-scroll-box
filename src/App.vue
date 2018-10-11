@@ -10,19 +10,19 @@
         :enableDragUp="true"
         @pull-up="loadMore"
     >
-      <div v-if="reloaded" class="w100 grey">刷新出来了</div>
+      <div v-if="reloaded" class="w100 grey">Reloaded!</div>
       <div class="w100 orange">1</div>
       <div class="w100 yellow">2</div>
       <div class="w100 green">3</div>
       <div class="w100 cyan">4</div>
       <div class="w100 blue">5</div>
-      <div v-if="loaded" class="w100 grey">又加载了一条</div>
+      <div v-if="loaded" class="w100 grey">Loaded new one!</div>
     </scroll-box>
 
     <div class="scroll-test-buttons">
-      <button @click="testScrollTop(0)">滚动到顶部</button>
-      <button @click="testScrollTop(700)">滚动到700px处</button>
-      <button @click="testScrollTop('.cyan')">滚动到青色元素</button>
+      <button @click="testScrollTop(0)">Scroll to Top</button>
+      <button @click="testScrollTop(700)">Scroll to 700px</button>
+      <button @click="testScrollTop('.cyan')">Scroll to cyan element</button>
     </div>
   </div>
 </template>

@@ -25,7 +25,7 @@ you should run 'this.$refs.scrollInstance.scrollUpdate()' to update the scroll-i
         v-if="enableDragDown"
         :style="beforeStyle"
         :class="{'release-and-trigger': dragDownDistance > triggerDistance, 'holding before-holding': reloading}"
-    ><slot name="dragDownArea"><span class="drag-down-text">释放刷新</span></slot></div>
+    ><slot name="dragDownArea"><span class="drag-down-text">Release and reload</span></slot></div>
     <div class="scroll-content-wrapper"
         ref="scrollContent"
         :class="{'holding': reloading || loading}"
@@ -43,7 +43,7 @@ you should run 'this.$refs.scrollInstance.scrollUpdate()' to update the scroll-i
         v-if="enableDragUp"
         :style="afterStyle"
         :class="{'release-and-trigger': dragUpDistance > triggerDistance, 'holding after-holding': loading}"
-    ><slot name="dragUpArea"><span class="drag-up-text">释放加载更多</span></slot></div>
+    ><slot name="dragUpArea"><span class="drag-up-text">Release and load more</span></slot></div>
     <return-top-button v-if="enableTopButton"></return-top-button>
   </div>
 </template>

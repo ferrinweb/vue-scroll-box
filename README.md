@@ -54,19 +54,19 @@ export default {
         :enableDragUp="true"
         @pull-up="loadMore"
     >
-      <div v-if="reloaded" class="w100 grey">刷新出来了</div>
+      <div v-if="reloaded" class="w100 grey">Reloaded!</div>
       <div class="w100 orange">1</div>
       <div class="w100 yellow">2</div>
       <div class="w100 green">3</div>
       <div class="w100 cyan">4</div>
       <div class="w100 blue">5</div>
-      <div v-if="loaded" class="w100 grey">又加载了一条</div>
+      <div v-if="loaded" class="w100 grey">Loaded new one!</div>
     </scroll-box>
     <!-- These are some test buttons  -->
     <div class="scroll-test-buttons">
-      <button @click="testScrollTop(0)">滚动到顶部</button>
-      <button @click="testScrollTop(700)">滚动到700px处</button>
-      <button @click="testScrollTop('.cyan')">滚动到青色元素</button>
+      <button @click="testScrollTop(0)">Scroll to Top</button>
+      <button @click="testScrollTop(700)">Scroll to 700px</button>
+      <button @click="testScrollTop('.cyan')">Scroll to cyan element</button>
     </div>
   </div>
 </template>
@@ -187,8 +187,8 @@ export default {
 名称 | 说明 | 默认值
 |---|---|---|
 default | 滚动盒子内容 | 无
-dragDownArea | 下拉刷新提示内容区 | &lt;span class="drag-down-text"&gt;释放刷新&lt;/span&gt;
-dragUpArea | 上拉加载提示内容区 | &lt;span class="drag-down-text"&gt;释放加载更多&lt;/span&gt;
+dragDownArea | 下拉刷新提示内容区 | &lt;span class="drag-down-text"&gt;Release and reload&lt;/span&gt;
+dragUpArea | 上拉加载提示内容区 | &lt;span class="drag-down-text"&gt;Release and load more&lt;/span&gt;
 
 ### Attributes / 属性
 名称 | 说明 | 默认值
