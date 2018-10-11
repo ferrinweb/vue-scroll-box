@@ -12,12 +12,12 @@
 ### Install / 安装
 
 ```javascript
-npm install vue-scroll-box
+npm install vue2-scroll-box
 // or install from github reponsitory
 npm install https://github.com/ferrinweb/vue-scroll-box.git
 
 // or use yarn / 推荐使用 yarn
-yarn add vue-scroll-box
+yarn add vue2-scroll-box
 // or install from github reponsitory
 yarn add https://github.com/ferrinweb/vue-scroll-box.git
 ```

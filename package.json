@@ -1,5 +1,5 @@
 {
-  "name": "vue-scroll-box",
+  "name": "vue2-scroll-box",
   "description": "A vue scroll box component, support pull-down and pull-up event, support interaction by both mouse and touch.",
   "version": "1.0.0",
   "author": "ferrinweb <ferrinweb@gmail.com>",
