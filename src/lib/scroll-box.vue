@@ -84,7 +84,8 @@ export default {
       dragDownDistance: 0,
       dragDownTrigger: false,
       loading: false,
-      reloading: false
+      reloading: false,
+      transforming: false
     }
   },
   methods: {
@@ -118,11 +119,13 @@ export default {
         this.$emit('pull-up')
         this.loading = true
       }
-      if (!this.reloading && !this.loading) {
-        this.scrollUpdate()
-      } else {
-        this.reboundDrag()
-      }
+      requestAnimationFrame(() => {
+        if (!this.reloading && !this.loading) {
+          this.scrollUpdate()
+        } else {
+          this.reboundDrag()
+        }
+      })
     },
     startTouchDrag (e) {
       if (this.reloading || this.loading) return
@@ -142,7 +145,12 @@ export default {
       }
     },
     doTransform (y) {
-      this.scrollContent.style.transform = 'translateY(' + y + 'px)'
+      if (this.transforming) return
+      this.transforming = true
+      requestAnimationFrame(() => {
+        this.scrollContent.style.transform = 'translateY(' + y + 'px)'
+        this.transforming = false
+      })
     },
     dragDown (distance) {
       this.dragDownDistance = distance > this.dragDistance ? this.dragDistance : distance
@@ -154,7 +162,7 @@ export default {
     },
     // 下拉刷新、上拉加载事件最终被触发后的回弹
     reboundDrag () {
-      this.scrollContent.style.transition = 'transform .2s'
+      this.scrollContent.style.transition = 'transform .2s cubic-bezier(.11,.49,.61,.99)'
       let reboundY = this.halfDistance
       if (this.dragDownDistance) {
         this.dragDownDistance = reboundY
@@ -264,7 +272,7 @@ export default {
     position: absolute;
     z-index: 1;
     width: 100%;
-    height: 100%;
+    height: 0;
     left: 0;
     display: flex;
     justify-content: center;
