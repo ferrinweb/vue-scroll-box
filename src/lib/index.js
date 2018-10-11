@@ -1,13 +1,13 @@
-import ScrollBox from './scroll-box.vue'
+import scrollBox from './scroll-box.vue'
 
-const scrollBox = {
+const ScrollBox = {
   install: function (Vue) {
-    Vue.component(ScrollBox.name, ScrollBox)
+    Vue.component(scrollBox.name, scrollBox)
   }
 }
 
 if (typeof window !== 'undefined' && window.Vue) {
-  window.Vue.use(scrollBox)
+  window.Vue.use(ScrollBox)
 }
 
-export default scrollBox
+export default ScrollBox
