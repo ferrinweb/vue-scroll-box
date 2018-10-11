@@ -152,7 +152,7 @@ export default {
       this.dragUpDistance = distance < -this.dragDistance ? this.dragDistance : -distance
       this.doTransform(-this.dragUpDistance)
     },
-    // 下拉刷新、上拉加载事件最终被处罚后的回弹
+    // 下拉刷新、上拉加载事件最终被触发后的回弹
     reboundDrag () {
       this.scrollContent.style.transition = 'transform .2s'
       let reboundY = this.halfDistance
@@ -175,12 +175,10 @@ export default {
           this.scrollBox.scroll({top: this.y + this.halfDistance})
         })
         this.loading = false
-        this.dragUpDistance = 0
       }
-      if (this.reloading) {
-        this.reloading = false
-        this.dragDownDistance = 0
-      }
+      this.reloading = false
+      this.dragDownDistance = 0
+      this.dragUpDistance = 0
       this.scrollContent.style.transition = ''
       this.scrollContent.style.transform = ''
     },
@@ -222,14 +220,14 @@ export default {
     },
     beforeStyle () {
       const styles = []
-      styles.push('transition: unset')
+      this.currentY && styles.push('transition: unset')
       styles.push('height:' + this.dragDownDistance + 'px')
       styles.push('opacity: ' + this.dragDownDistance * 0.618 / this.triggerDistance)
       return styles.join(';') + ';'
     },
     afterStyle () {
       const styles = []
-      styles.push('transition: unset')
+      this.currentY && styles.push('transition: unset')
       styles.push('height:' + this.dragUpDistance + 'px')
       styles.push('opacity: ' + this.dragUpDistance * 0.618 / this.triggerDistance)
       return styles.join(';') + ';'
@@ -259,7 +257,7 @@ export default {
     overflow: hidden;
     will-change: transform;
     transform: translateY(0);
-    transition: transform .3s;
+    transition: transform .3s cubic-bezier(.11,.49,.61,.99);
     z-index: 2;
   }
   .after, .before{
