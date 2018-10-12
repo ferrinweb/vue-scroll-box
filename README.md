@@ -205,6 +205,8 @@ enableTopButton | 是否显示返回顶部按钮 | true
 |---|---|---|
 scrollUpdate | 更新滚动盒子状态 | contentUpdate: 标记内容是否有更新，仅在上拉加载完成时需要
 scrollTo | 滚动内容至指定位置 | target：Nubmer类型为坐标，即滚动至某坐标处；String类型是为选择器，以及Dom对象类型是将滚动至指定元素处。offset: 滚动偏移量
+disableScroll | 禁用滚动 | 无参数
+enableScroll | 启用滚动 | 无参数
 
 ### Events / 事件
 名称 | 说明

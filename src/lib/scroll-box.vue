@@ -21,6 +21,7 @@ you should run 'this.$refs.scrollInstance.scrollUpdate()' to update the scroll-i
 -->
 <template>
   <div class="scroll-box" ref="scrollBox"
+    :class="{'scroll-lock': scrollLock}"
     @scroll="_boxScrolling"
     @touchmove="_startTouchDrag($event)"
     @touchstart="_markDragStart($event)"
@@ -146,7 +147,6 @@ export default {
       if (!this.isBottom && !this.isTop) return
       e.type === 'mousemove' && e.preventDefault()
       if (this.currentY !== null) {
-        this.disableScroll()
         // 判断拖动方向
         let pageY = e.type === 'touchmove' ? e.touches[0].pageY : e.pageY
         let direction = (pageY - this.currentY)
@@ -167,10 +167,12 @@ export default {
       })
     },
     _dragDown (distance) {
+      this.disableScroll()
       this.dragDownDistance = distance > this.dragDistance ? this.dragDistance : distance
       this._doTransform(this.dragDownDistance)
     },
     _dragUp (distance) {
+      this.disableScroll()
       this.dragUpDistance = distance < -this.dragDistance ? this.dragDistance : -distance
       this._doTransform(-this.dragUpDistance)
     },
@@ -285,6 +287,9 @@ export default {
     overflow: hidden;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+  }
+  .scroll-box.scroll-lock{
+    overflow-y: hidden;
   }
   .scroll-content-wrapper{
     width: 100%;
