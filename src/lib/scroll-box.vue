@@ -21,7 +21,7 @@ you should run 'this.$refs.scrollInstance.scrollUpdate()' to update the scroll-i
 -->
 <template>
   <div class="scroll-box" ref="scrollBox"
-    :class="{'scroll-lock': scrollLock}"
+    :class="{'scroll-lock': scrollLockByUser || scrollLock}"
     @scroll="_boxScrolling"
     @touchmove="_startTouchDrag($event)"
     @touchstart="_markDragStart($event)"
@@ -91,7 +91,8 @@ export default {
       loading: false,
       reloading: false,
       transforming: false,
-      scrollLock: false
+      scrollLock: false,
+      scrollLockByUser: false
     }
   },
   methods: {
@@ -113,7 +114,7 @@ export default {
     },
     _markDragEnd () {
       this.draging = false
-      this.enableScroll()
+      this.scrollLock = false
       if (this.reloading || this.loading) return
       this.currentY = null
       if (!this.dragDownDistance && !this.dragUpDistance) return
@@ -167,12 +168,12 @@ export default {
       })
     },
     _dragDown (distance) {
-      this.disableScroll()
+      this.scrollLock = true
       this.dragDownDistance = distance > this.dragDistance ? this.dragDistance : distance
       this._doTransform(this.dragDownDistance)
     },
     _dragUp (distance) {
-      this.disableScroll()
+      this.scrollLock = true
       this.dragUpDistance = distance < -this.dragDistance ? this.dragDistance : -distance
       this._doTransform(-this.dragUpDistance)
     },
@@ -190,10 +191,10 @@ export default {
       }
     },
     disableScroll () {
-      this.scrollLock = true
+      this.scrollLockByUser = true
     },
     enableScroll () {
-      this.scrollLock = false
+      this.scrollLockByUser = false
     },
     // 下拉刷新或上拉加载更多后须执行滚动盒子实例的 scrollUpdate 方法更新状态
     // this.$refs.scrollInstance.scrollUpdate()
@@ -253,14 +254,18 @@ export default {
     },
     beforeStyle () {
       const styles = []
-      this.currentY && styles.push('transition: unset')
-      styles.push('height:' + this.dragDownDistance + 'px')
+      if (this.dragDownDistance) {
+        styles.push('transition: unset')
+        styles.push('height:' + this.dragDownDistance + 'px')
+      }
       return styles.join(';') + ';'
     },
     afterStyle () {
       const styles = []
-      this.currentY && styles.push('transition: unset')
-      styles.push('height:' + this.dragUpDistance + 'px')
+      if (this.dragUpDistance) {
+        styles.push('transition: unset')
+        styles.push('height:' + this.dragUpDistance + 'px')
+      }
       return styles.join(';') + ';'
     }
   },

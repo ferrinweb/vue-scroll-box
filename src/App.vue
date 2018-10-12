@@ -23,6 +23,8 @@
       <button @click="testScrollTop(0)">Scroll to Top</button>
       <button @click="testScrollTop(700)">Scroll to 700px</button>
       <button @click="testScrollTop('.cyan')">Scroll to cyan element</button>
+      <button @click="disableScroll()">Disable Scroll</button>
+      <button @click="enableScroll()">Enable Scroll</button>
     </div>
   </div>
 </template>
@@ -57,6 +59,12 @@ export default {
     },
     testScrollTop (target) {
       this.$refs.scrollBox.scrollTo(target)
+    },
+    disableScroll () {
+      this.$refs.scrollBox.disableScroll()
+    },
+    enableScroll () {
+      this.$refs.scrollBox.enableScroll()
     }
   }
 }
@@ -124,7 +132,7 @@ export default {
     left: 0;
     margin: auto;
     width: 200px;
-    height: 110px;
+    height: 190px;
     z-index: 3;
   }
 
