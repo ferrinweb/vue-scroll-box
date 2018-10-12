@@ -275,15 +275,18 @@ export default {
     -webkit-overflow-scrolling: touch;
   }
   .scroll-content-wrapper{
-    position: relative;
+    /*position: relative;*/
     width: 100%;
     min-height: 100%;
     height: auto;
-    overflow: hidden;
+    /*overflow: hidden;*/
     will-change: transform;
     transform: translateY(0);
     transition: transform .3s cubic-bezier(.11,.49,.61,.99);
     z-index: 2;
+  }
+  .scroll-content-wrapper > * {
+    position: sticky;
   }
   .scroll-content-wrapper.draging > * {
     pointer-events: none;
