@@ -20,7 +20,16 @@ When the reloadList or loadMore method in the demo above is executed,
 you should run 'this.$refs.scrollInstance.scrollUpdate()' to update the scroll-instance's view.
 -->
 <template>
-  <div class="scroll-box" ref="scrollBox" @scroll="boxScrolling">
+  <div class="scroll-box" ref="scrollBox"
+    @scroll="_boxScrolling"
+    @touchmove="_startTouchDrag($event)"
+    @touchstart="_markDragStart($event)"
+    @touchend="_markDragEnd"
+    @mousemove="_startTouchDrag($event)"
+    @mousedown="_markDragStart($event)"
+    @mouseup="_markDragEnd"
+    @mouseleave="_markDragEnd"
+  >
     <div class="before"
         v-if="enableDragDown"
         :style="beforeStyle"
@@ -29,13 +38,6 @@ you should run 'this.$refs.scrollInstance.scrollUpdate()' to update the scroll-i
     <div class="scroll-content-wrapper"
         ref="scrollContent"
         :class="{'holding': reloading || loading, 'draging': draging && (dragDownDistance || dragUpDistance)}"
-        @touchmove="startTouchDrag($event)"
-        @touchstart="markDragStart($event)"
-        @touchend="markDragEnd"
-        @mousemove="startTouchDrag($event)"
-        @mousedown="markDragStart($event)"
-        @mouseup="markDragEnd"
-        @mouseleave="markDragEnd"
     >
       <slot></slot>
     </div>
@@ -87,16 +89,18 @@ export default {
       dragDownTrigger: false,
       loading: false,
       reloading: false,
-      transforming: false
+      transforming: false,
+      scrollLock: false
     }
   },
   methods: {
-    boxScrolling () {
+    _boxScrolling () {
+      if (this.scrollLock) return
       let y = this.scrollBox.scrollTop
       if (this.enableDragDown || this.enableDragUp) this.y = y
       this.$emit('box-scroll', {y})
     },
-    markDragStart (e) {
+    _markDragStart (e) {
       if (this.reloading || this.loading) return
       e.type === 'mousedown' && e.preventDefault()
       // 仅当在滚动边界处赋值拖动起始点
@@ -106,8 +110,9 @@ export default {
       this.currentY = e.type === 'touchstart' ? e.touches[0].pageY : e.pageY
       this.scrollContent.style.transition = 'unset'
     },
-    markDragEnd () {
+    _markDragEnd () {
       this.draging = false
+      this.enableScroll()
       if (this.reloading || this.loading) return
       this.currentY = null
       if (!this.dragDownDistance && !this.dragUpDistance) return
@@ -131,28 +136,29 @@ export default {
         if (!this.reloading && !this.loading) {
           this.scrollUpdate()
         } else {
-          this.reboundDrag()
+          this._reboundDrag()
         }
       })
     },
-    startTouchDrag (e) {
+    _startTouchDrag (e) {
       if (this.reloading || this.loading) return
       // 仅当滚动盒子处于顶部或底部时，可触发拖拽动作
       if (!this.isBottom && !this.isTop) return
       e.type === 'mousemove' && e.preventDefault()
       if (this.currentY !== null) {
+        this.disableScroll()
         // 判断拖动方向
         let pageY = e.type === 'touchmove' ? e.touches[0].pageY : e.pageY
         let direction = (pageY - this.currentY)
         // 减小拖距，增强体验
         direction *= this.dragDistanceRatio
         // 坐标变化为正值，表示为下拉操作
-        direction > 0 && this.enableDragDown && this.isTop && this.dragDown(direction)
+        direction > 0 && this.enableDragDown && this.isTop && this._dragDown(direction)
         // 坐标变化为负值，表示为上拉操作
-        direction < 0 && this.enableDragUp && this.isBottom && this.dragUp(direction)
+        direction < 0 && this.enableDragUp && this.isBottom && this._dragUp(direction)
       }
     },
-    doTransform (y) {
+    _doTransform (y) {
       if (this.transforming) return
       this.transforming = true
       requestAnimationFrame(() => {
@@ -160,16 +166,16 @@ export default {
         this.transforming = false
       })
     },
-    dragDown (distance) {
+    _dragDown (distance) {
       this.dragDownDistance = distance > this.dragDistance ? this.dragDistance : distance
-      this.doTransform(this.dragDownDistance)
+      this._doTransform(this.dragDownDistance)
     },
-    dragUp (distance) {
+    _dragUp (distance) {
       this.dragUpDistance = distance < -this.dragDistance ? this.dragDistance : -distance
-      this.doTransform(-this.dragUpDistance)
+      this._doTransform(-this.dragUpDistance)
     },
     // 下拉刷新、上拉加载事件最终被触发后的回弹
-    reboundDrag () {
+    _reboundDrag () {
       this.scrollContent.style.transition = 'transform .2s cubic-bezier(.11,.49,.61,.99)'
       let reboundY = this.halfDistance
       if (this.dragDownDistance) {
@@ -180,6 +186,12 @@ export default {
         this.dragUpDistance = reboundY
         this.scrollContent.style.transform = 'translateY(' + -reboundY + 'px)'
       }
+    },
+    disableScroll () {
+      this.scrollLock = true
+    },
+    enableScroll () {
+      this.scrollLock = false
     },
     // 下拉刷新或上拉加载更多后须执行滚动盒子实例的 scrollUpdate 方法更新状态
     // this.$refs.scrollInstance.scrollUpdate()
@@ -275,18 +287,14 @@ export default {
     -webkit-overflow-scrolling: touch;
   }
   .scroll-content-wrapper{
-    /*position: relative;*/
     width: 100%;
     min-height: 100%;
     height: auto;
-    /*overflow: hidden;*/
+    overflow: hidden;
     will-change: transform;
     transform: translateY(0);
     transition: transform .3s cubic-bezier(.11,.49,.61,.99);
     z-index: 2;
-  }
-  .scroll-content-wrapper > * {
-    position: sticky;
   }
   .scroll-content-wrapper.draging > * {
     pointer-events: none;
