@@ -114,13 +114,17 @@ export default {
       if (this.dragDownDistance >= this.triggerDistance) {
         // 触发下拉刷新
         // console.info('触发下拉刷新')
-        this.$emit('pull-down')
+        setTimeout(() => {
+          this.$emit('pull-down')
+        }, 200)
         this.reloading = true
       }
       if (this.dragUpDistance >= this.triggerDistance) {
         // 触发上拉加载更多
         // console.info('触发上拉加载更多')
-        this.$emit('pull-up')
+        setTimeout(() => {
+          this.$emit('pull-up')
+        }, 200)
         this.loading = true
       }
       requestAnimationFrame(() => {
