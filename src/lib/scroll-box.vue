@@ -241,14 +241,12 @@ export default {
       const styles = []
       this.currentY && styles.push('transition: unset')
       styles.push('height:' + this.dragDownDistance + 'px')
-      styles.push('opacity: ' + this.dragDownDistance * 0.618 / this.triggerDistance)
       return styles.join(';') + ';'
     },
     afterStyle () {
       const styles = []
       this.currentY && styles.push('transition: unset')
       styles.push('height:' + this.dragUpDistance + 'px')
-      styles.push('opacity: ' + this.dragUpDistance * 0.618 / this.triggerDistance)
       return styles.join(';') + ';'
     }
   },
@@ -299,12 +297,10 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    opacity: 0;
-    background-color: #e3fbe5;
-    will-change: auto;
+    will-change: height;
     overflow: hidden;
     transform: translate3d(0,0,0);
-    transition: color .3s, opacity .3s cubic-bezier(.11,.49,.61,.99), height .3s cubic-bezier(.11,.49,.61,.99);
+    transition: height .3s cubic-bezier(.11,.49,.61,.99);
   }
   .after .drag-up-text,
   .before .drag-down-text{
