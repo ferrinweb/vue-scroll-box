@@ -35,7 +35,11 @@ you should run 'this.$refs.scrollInstance.scrollUpdate()' to update the scroll-i
         v-if="enableDragDown"
         :style="'height:' + this.dragDistance + 'px'"
         :class="{'release-and-trigger': dragDownDistance > triggerDistance, 'holding before-holding': reloading}"
-    ><slot name="dragDownArea"><span class="drag-down-text">Release and reload</span></slot></div>
+    >
+      <div ref="before">
+        <slot name="dragDownArea"><span class="drag-down-text">{{ beforeText }}</span></slot>
+      </div>
+    </div>
     <div class="scroll-content-wrapper"
         ref="scrollContent"
         :class="{'holding': reloading || loading, 'draging': draging && (dragDownDistance || dragUpDistance)}"
@@ -46,7 +50,11 @@ you should run 'this.$refs.scrollInstance.scrollUpdate()' to update the scroll-i
         v-if="enableDragUp"
         :style="'height:' + this.dragDistance + 'px'"
         :class="{'release-and-trigger': dragUpDistance > triggerDistance, 'holding after-holding': loading}"
-    ><slot name="dragUpArea"><span class="drag-up-text">Release and load more</span></slot></div>
+    >
+      <div ref="after">
+        <slot name="dragUpArea"><span class="drag-up-text">{{ afterText }}</span></slot>
+      </div>
+    </div>
     <return-top-button v-if="enableTopButton"></return-top-button>
   </div>
 </template>
@@ -74,6 +82,14 @@ export default {
     enableTopButton: {
       type: Boolean,
       default: true
+    },
+    beforeText: {
+      type: String,
+      default: 'Release and reload'
+    },
+    afterText: {
+      type: String,
+      default: 'Release and load more'
     }
   },
   data () {
@@ -92,7 +108,9 @@ export default {
       reloading: false,
       transforming: false,
       scrollLock: false,
-      scrollLockByUser: false
+      scrollLockByUser: false,
+      scrollBefore: null,
+      scrollAfter: null
     }
   },
   methods: {
@@ -264,6 +282,8 @@ export default {
     this.scrollBoxHeight = this.scrollBox.clientHeight
     this.scrollContent = this.$refs.scrollContent
     this.scrollContentHeight = this.scrollContent.clientHeight
+    if (this.enableDragDown) this.scrollBefore = this.$refs.before
+    if (this.enableDragUp) this.scrollAfter = this.$refs.after
     // todo 窗口尺寸变化时，应该重新计算滚动盒子高度
     // todo 但是无法注销事件函数
     window.addEventListener('resize', () => {

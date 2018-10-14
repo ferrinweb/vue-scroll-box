@@ -9,6 +9,7 @@
         @pull-down="reloadList"
         :enableDragUp="true"
         @pull-up="loadMore"
+        beforeText="释放刷新"
     >
       <div v-if="reloaded" class="w100 grey">Reloaded!</div>
       <div class="w100 orange">1</div>
