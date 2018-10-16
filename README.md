@@ -199,6 +199,8 @@ dragDistance | 下拉或上拉最大像素尺度，值越大越不容易触发 p
 enableDragDown | 是否启用下拉刷新特性 | false
 enableDragUp | 是否启用上拉加载特性 | false
 enableTopButton | 是否显示返回顶部按钮 | true
+beforeText | 下拉刷新提示文本 | Release and reload
+afterText | 上拉加载更多提示文本 | Release and load more
 
 ### Methods / 方法
 名称 | 说明 | 参数
