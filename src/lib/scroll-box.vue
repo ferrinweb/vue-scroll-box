@@ -62,31 +62,37 @@ you should run 'this.$refs.scrollInstance.scrollUpdate()' to update the scroll-i
 <script>
 import returnTopButton from './return-top-button'
 export default {
-  name: 'scroll-box',
+  name: 'scrollbox',
   components: {
     returnTopButton
   },
   props: {
+    // 拖拽阈值，超过该值后释放将触发下拉或上拉事件
     dragDistance: {
       type: Number,
       default: 150
     },
+    // 是否允许下拉
     enableDragDown: {
       type: Boolean,
       default: false
     },
+    // 是否允许上拉
     enableDragUp: {
       type: Boolean,
       default: false
     },
+    // 是否使用返回顶部按钮
     enableTopButton: {
       type: Boolean,
       default: true
     },
+    // 下拉刷新提示文本
     beforeText: {
       type: String,
       default: 'Release and reload'
     },
+    // 上拉加载更多提示文本
     afterText: {
       type: String,
       default: 'Release and load more'
@@ -118,6 +124,7 @@ export default {
       if (this.scrollLock) return
       let y = this.scrollBox.scrollTop
       if (this.enableDragDown || this.enableDragUp) this.y = y
+      // Fire when the scroll box is scrolling
       this.$emit('box-scroll', {y})
     },
     _markDragStart (e) {
@@ -137,17 +144,15 @@ export default {
       this.currentY = null
       if (!this.dragDownDistance && !this.dragUpDistance) return
       if (this.dragDownDistance >= this.triggerDistance) {
-        // 触发下拉刷新
-        // console.info('触发下拉刷新')
         setTimeout(() => {
+          // 触发下拉刷新
           this.$emit('pull-down')
         }, 200)
         this.reloading = true
       }
       if (this.dragUpDistance >= this.triggerDistance) {
-        // 触发上拉加载更多
-        // console.info('触发上拉加载更多')
         setTimeout(() => {
+          // 触发上拉加载更多
           this.$emit('pull-up')
         }, 200)
         this.loading = true
@@ -209,14 +214,22 @@ export default {
         this.scrollContent.style.transform = 'translateY(' + -reboundY + 'px)'
       }
     },
+    // @vuese
+    // 禁用滚动
     disableScroll () {
       this.scrollLockByUser = true
     },
+    // @vuese
+    // 启用滚动
     enableScroll () {
       this.scrollLockByUser = false
     },
-    // 下拉刷新或上拉加载更多后须执行滚动盒子实例的 scrollUpdate 方法更新状态
-    // this.$refs.scrollInstance.scrollUpdate()
+    /**
+     * @vuese
+     * 下拉刷新或上拉加载更多后须执行滚动盒子实例的 scrollUpdate 方法更新状态
+     * this.$refs.scrollInstance.scrollUpdate()
+     * @arg contentUpdate {boolean} 盒子内容是否有更新
+     */
     scrollUpdate (contentUpdate) {
       if (this.loading) {
         contentUpdate && this.$nextTick(() => {
@@ -238,6 +251,12 @@ export default {
         this.scrollContent.style.willChange = ''
       }, 300)
     },
+    /**
+     * @vuese
+     * 滚动至指定位置或元素
+     * @arg top 滚动至何处，object为dom对象，string为选择器，number为像素
+     * @arg offset 滚动偏移
+     */
     scrollTo (top, offset) {
       let type = typeof top
       let y = 0
