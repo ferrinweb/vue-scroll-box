@@ -62,7 +62,7 @@ you should run 'this.$refs.scrollInstance.scrollUpdate()' to update the scroll-i
 <script>
 import returnTopButton from './return-top-button'
 export default {
-  name: 'scrollbox',
+  name: 'scroll-box',
   components: {
     returnTopButton
   },
