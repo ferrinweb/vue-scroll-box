@@ -20,17 +20,7 @@ When the reloadList or loadMore method in the demo above is executed,
 you should run 'this.$refs.scrollInstance.scrollUpdate()' to update the scroll-instance's view.
 -->
 <template>
-  <div class="scroll-box" ref="scrollBox"
-    :class="{'scroll-lock': scrollLockByUser || scrollLock}"
-    @scroll="_boxScrolling"
-    @touchmove="_startTouchDrag($event)"
-    @touchstart="_markDragStart($event)"
-    @touchend="_markDragEnd"
-    @mousemove="_startTouchDrag($event)"
-    @mousedown="_markDragStart($event)"
-    @mouseup="_markDragEnd"
-    @mouseleave="_markDragEnd"
-  >
+  <div class="scroll-box">
     <div class="before"
         v-if="enableDragDown"
         :style="'height:' + this.dragDistance + 'px'"
@@ -40,11 +30,23 @@ you should run 'this.$refs.scrollInstance.scrollUpdate()' to update the scroll-i
         <slot name="dragDownArea"><span class="drag-down-text">{{ beforeText }}</span></slot>
       </div>
     </div>
-    <div class="scroll-content-wrapper"
-        ref="scrollContent"
-        :class="{'holding': reloading || loading, 'draging': draging && (dragDownDistance || dragUpDistance)}"
+    <div class="scroll-content-wrapper" :id="'scroll-wrapper-' + _uid" ref="scrollBox"
+      :class="{'scroll-lock': scrollLockByUser || scrollLock}"
+      @scroll="_boxScrolling"
+      @touchmove="_startTouchDrag($event)"
+      @touchstart="_markDragStart($event)"
+      @touchend="_markDragEnd"
+      @mousemove="_startTouchDrag($event)"
+      @mousedown="_markDragStart($event)"
+      @mouseup="_markDragEnd"
+      @mouseleave="_markDragEnd"
     >
-      <slot></slot>
+      <div class="scroll-content"
+          ref="scrollContent"
+          :class="{'holding': reloading || loading, 'draging': draging && (dragDownDistance || dragUpDistance)}"
+      >
+        <slot></slot>
+      </div>
     </div>
     <div class="after"
         v-if="enableDragUp"
@@ -55,7 +57,7 @@ you should run 'this.$refs.scrollInstance.scrollUpdate()' to update the scroll-i
         <slot name="dragUpArea"><span class="drag-up-text">{{ afterText }}</span></slot>
       </div>
     </div>
-    <return-top-button v-if="enableTopButton"></return-top-button>
+    <return-top-button :target="'#scroll-wrapper-' + _uid" v-if="enableTopButton"></return-top-button>
   </div>
 </template>
 
@@ -317,13 +319,20 @@ export default {
 <style scoped>
   .scroll-box{
     overflow: hidden;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-  .scroll-box.scroll-lock{
-    overflow-y: hidden;
   }
   .scroll-content-wrapper{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    z-index: 2;
+  }
+  .scroll-content-wrapper.scroll-lock {
+    overflow-y: hidden;
+  }
+  .scroll-content{
     position: relative;
     width: 100%;
     min-height: 100%;
@@ -331,9 +340,8 @@ export default {
     overflow: hidden;
     transform: translate3d(0,0,0);
     transition: transform .2s cubic-bezier(.11,.49,.61,.99);
-    z-index: 2;
   }
-  .scroll-content-wrapper.draging > * {
+  .scroll-content.draging > * {
     pointer-events: none;
   }
   .after, .before{
