@@ -12,12 +12,17 @@
         beforeText="释放刷新"
     >
       <div v-if="reloaded" class="w100 grey">Reloaded!</div>
+      <div class="sticky-title">Title 1</div>
       <div class="w100 orange">1</div>
+      <div class="sticky-title">Title 2</div>
       <div class="w100 yellow">2</div>
+      <div class="sticky-title">Title 3</div>
       <div class="w100 green">3</div>
+      <div class="sticky-title">Title 4</div>
       <div class="w100 cyan">4</div>
+      <div class="sticky-title">Title 5</div>
       <div class="w100 blue">5</div>
-      <div v-if="loaded" class="w100 grey">Loaded new one!</div>
+      <div v-if="loaded" class="w100 grey">A New One!</div>
     </scroll-box>
 
     <div class="scroll-test-buttons">
@@ -49,14 +54,14 @@ export default {
       setTimeout(() => {
         this.reloaded = true
         this.$refs.scrollBox.scrollUpdate()
-      }, 2000)
+      }, 1200)
     },
     loadMore () {
       setTimeout(() => {
         let contentUpdate = !this.loaded
         this.loaded = true
         this.$refs.scrollBox.scrollUpdate(contentUpdate)
-      }, 2000)
+      }, 1200)
     },
     testScrollTop (target) {
       this.$refs.scrollBox.scrollTo(target)
@@ -86,7 +91,7 @@ export default {
 
   .scroll-box-test {
     color: white;
-    font-size: 42px;
+    font-size: 64px;
   }
 
   .hw100 {
@@ -97,7 +102,7 @@ export default {
   .w100 {
     font-weight: lighter;
     text-align: center;
-    line-height: 2;
+    line-height: 6;
     width: 100%;
     height: 500px;
   }
@@ -143,5 +148,15 @@ export default {
     padding: 5px 10px;
     border-radius: 3px;
     margin: 0 0 10px 10px;
+  }
+
+  .sticky-title{
+    position: sticky;
+    top: 0;
+    font-size: 1.6rem;
+    line-height: 42px;
+    padding: 0 15px;
+    text-align: center;
+    background-color: cadetblue;
   }
 </style>

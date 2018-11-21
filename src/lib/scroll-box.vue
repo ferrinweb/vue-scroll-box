@@ -337,7 +337,7 @@ export default {
     width: 100%;
     min-height: 100%;
     height: auto;
-    overflow: hidden;
+    overflow: visible;
     transform: translate3d(0,0,0);
     transition: transform .2s cubic-bezier(.11,.49,.61,.99);
   }
