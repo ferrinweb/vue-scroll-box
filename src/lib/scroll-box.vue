@@ -1,24 +1,6 @@
 <!-- Author: ferrinweb -->
 <!-- Create Time: 2018/10/9 11:32 -->
 <!-- Description: scroll-box -->
-<!-- How to use?
-import as component and then:
-<scroll-box class="hw100"
-    ref="scrollBox"
-    :enableDragDown="true"
-    @pull-down="reloadList"
-    :enableDragUp="true"
-    @pull-up="loadMore"
->
-  <div class="w100 blue"></div>
-  <div class="w100 red"></div>
-  <div class="w100 green"></div>
-  <div class="w100 pink"></div>
-  <div class="w100 orange"></div>
-</scroll-box>
-When the reloadList or loadMore method in the demo above is executed,
-you should run 'this.$refs.scrollInstance.scrollUpdate()' to update the scroll-instance's view.
--->
 <template>
   <div class="scroll-box">
     <div class="before"
@@ -130,8 +112,8 @@ export default {
       this.$emit('box-scroll', {y})
     },
     _markDragStart (e) {
+      if (e.which !== 1 && e.which !== 0) return
       if (this.reloading || this.loading) return
-      e.type === 'mousedown' && e.preventDefault()
       // 仅当在滚动边界处赋值拖动起始点
       if (!this.enableDragDown && !this.enableDragUp) return
       if (!this.isBottom && !this.isTop) return
@@ -168,6 +150,7 @@ export default {
       })
     },
     _startTouchDrag (e) {
+      if (e.which !== 1 && e.which !== 0) return
       if (this.reloading || this.loading) return
       // 仅当滚动盒子处于顶部或底部时，可触发拖拽动作
       if (!this.isBottom && !this.isTop) return
@@ -277,6 +260,11 @@ export default {
           y = this.y
       }
       this.scrollBox.scroll({top: y - (offset || 0), behavior: 'smooth'})
+    },
+    updateScrollBoxHeight () {
+      this.$nextTick(() => {
+        this.scrollBoxHeight = this.scrollBox.clientHeight
+      })
     }
   },
   computed: {
@@ -305,13 +293,10 @@ export default {
     this.scrollContentHeight = this.scrollContent.clientHeight
     if (this.enableDragDown) this.scrollBefore = this.$refs.before
     if (this.enableDragUp) this.scrollAfter = this.$refs.after
-    // todo 窗口尺寸变化时，应该重新计算滚动盒子高度
-    // todo 但是无法注销事件函数
-    window.addEventListener('resize', () => {
-      this.$nextTick(() => {
-        this.scrollBoxHeight = this.scrollBox.clientHeight
-      })
-    })
+    window.addEventListener('resize', this.updateScrollBoxHeight)
+  },
+  beforeDestroy () {
+    window.removeEventListener('resize', this.updateScrollBoxHeight)
   }
 }
 </script>
