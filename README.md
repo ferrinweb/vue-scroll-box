@@ -6,6 +6,7 @@
 > 基于浏览器默认滚动盒子，功能简单，无复杂的设置项。
 
 ![](https://github.com/ferrinweb/vue-scroll-box/raw/master/vue-scroll-box.gif)
+![](https://github.com/ferrinweb/vue-scroll-box/raw/master/new-capture-for-sticky-layout-feature.gif)
 
 ## How to use / 如何使用
 
