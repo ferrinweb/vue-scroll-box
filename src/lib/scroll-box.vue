@@ -112,14 +112,12 @@ export default {
       this.$emit('box-scroll', {y})
     },
     _markDragStart (e) {
+      if (!this.enableDragDown && !this.enableDragUp) return
       if (e.which !== 1 && e.which !== 0) return
       if (this.reloading || this.loading) return
       // 仅当在滚动边界处赋值拖动起始点
-      if (!this.enableDragDown && !this.enableDragUp) return
       if (!this.isBottom && !this.isTop) return
-      this.draging = true
       this.currentY = e.type === 'touchstart' ? e.touches[0].pageY : e.pageY
-      this.scrollContent.style.transition = 'unset'
     },
     _markDragEnd () {
       this.draging = false
@@ -150,12 +148,10 @@ export default {
       })
     },
     _startTouchDrag (e) {
-      if (e.which !== 1 && e.which !== 0) return
-      if (this.reloading || this.loading) return
-      // 仅当滚动盒子处于顶部或底部时，可触发拖拽动作
-      if (!this.isBottom && !this.isTop) return
-      e.type === 'mousemove' && e.preventDefault()
       if (this.currentY !== null) {
+        e.type === 'mousemove' && e.preventDefault()
+        this.draging = true
+        this.scrollContent.style.transition = 'unset'
         // 判断拖动方向
         let pageY = e.type === 'touchmove' ? e.touches[0].pageY : e.pageY
         let direction = (pageY - this.currentY)
