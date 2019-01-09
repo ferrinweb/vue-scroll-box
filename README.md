@@ -45,7 +45,7 @@ export default {
 
 > 你可以直接检出 vue-scroll-box 源码到本地，查看示例。
 
-```javascript
+```html
 <template>
   <div id="app">
     <!-- You need to specify the size for scroll-box -->
